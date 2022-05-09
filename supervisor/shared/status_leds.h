@@ -59,4 +59,9 @@ void deinit_rxtx_leds(void);
 void toggle_rx_led(void);
 void toggle_tx_led(void);
 
+void init_wd_pin(void);
+void deinit_wd_pin(void);
+void turn_wd_pin_on(void);
+void turn_wd_pin_off(void);
+
 #endif  // MICROPY_INCLUDED_SUPERVISOR_STATUS_LEDS_H

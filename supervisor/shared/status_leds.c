@@ -115,6 +115,9 @@ uint8_t rgb_status_brightness = 0xff;
 
 #endif
 
+#define HW_WD_PIN &pin_PA09
+digitalio_digitalinout_obj_t wd_pin;
+
 #if CIRCUITPY_DIGITALIO && (defined(MICROPY_HW_LED_RX) || defined(MICROPY_HW_LED_TX))
 #include "shared-bindings/digitalio/DigitalInOut.h"
 
@@ -363,4 +366,23 @@ void toggle_tx_led(void) {
     #if CIRCUITPY_DIGITALIO && defined(MICROPY_HW_LED_TX)
     common_hal_digitalio_digitalinout_set_value(&tx_led, !common_hal_digitalio_digitalinout_get_value(&tx_led));
     #endif
+}
+
+/* CCR - External WD feed pin */
+void init_wd_pin(void) {
+    common_hal_digitalio_digitalinout_construct(&wd_pin, HW_WD_PIN);
+    common_hal_digitalio_digitalinout_switch_to_output(&wd_pin, true, DRIVE_MODE_PUSH_PULL);
+    common_hal_digitalio_digitalinout_never_reset(&wd_pin);
+}
+
+void deinit_wd_pin(void) {
+    common_hal_digitalio_digitalinout_deinit(&wd_pin);
+}
+
+void turn_wd_pin_on(void) {
+    common_hal_digitalio_digitalinout_set_value(&wd_pin, 1);
+}
+
+void turn_wd_pin_off(void) {
+    common_hal_digitalio_digitalinout_set_value(&wd_pin, 0);
 }

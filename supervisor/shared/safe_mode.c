@@ -75,6 +75,7 @@ safe_mode_t wait_for_safe_mode_reset(void) {
     #if CIRCUITPY_STATUS_LED
     status_led_init();
     #endif
+    init_wd_pin();
     #ifdef CIRCUITPY_BOOT_BUTTON
     digitalio_digitalinout_obj_t boot_button;
     common_hal_digitalio_digitalinout_construct(&boot_button, CIRCUITPY_BOOT_BUTTON);
@@ -83,7 +84,11 @@ safe_mode_t wait_for_safe_mode_reset(void) {
     uint64_t start_ticks = supervisor_ticks_ms64();
     uint64_t diff = 0;
     bool boot_in_safe_mode = false;
+    turn_wd_pin_on();
     while (diff < 1000) {
+        if (diff > 500) {
+          turn_wd_pin_off();
+        }
         #ifdef CIRCUITPY_STATUS_LED
         // Blink on for 100, off for 100
         bool led_on = (diff % 250) < 125;
@@ -101,6 +106,7 @@ safe_mode_t wait_for_safe_mode_reset(void) {
         #endif
         diff = supervisor_ticks_ms64() - start_ticks;
     }
+    deinit_wd_pin();
     #if CIRCUITPY_STATUS_LED
     new_status_color(BLACK);
     status_led_deinit();
