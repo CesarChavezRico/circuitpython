@@ -115,7 +115,7 @@ uint8_t rgb_status_brightness = 0xff;
 
 #endif
 
-#define HW_WD_PIN &pin_PA09
+#define HW_WD_PIN &pin_GPIO4
 digitalio_digitalinout_obj_t wd_pin;
 
 #if CIRCUITPY_DIGITALIO && (defined(MICROPY_HW_LED_RX) || defined(MICROPY_HW_LED_TX))
